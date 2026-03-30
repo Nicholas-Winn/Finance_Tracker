@@ -1,0 +1,25 @@
+name: Weekly Expense Reminder
+
+on:
+  schedule:
+    - cron: '0 13 * * 0'  # Every Sunday at 9:00 AM EST
+  workflow_dispatch:  # Allows manual trigger from GitHub
+
+jobs:
+  send_reminder:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Send reminder email
+        env:
+          GMAIL: ${{ secrets.GMAIL }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
+          APP_URL: ${{ secrets.APP_URL }}
+        run: python send_reminder.py
