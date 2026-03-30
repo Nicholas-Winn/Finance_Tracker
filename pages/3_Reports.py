@@ -231,9 +231,15 @@ else:
             if not bucket_data.empty:
                 avg_pct = bucket_data["pct"].mean()
                 diff = avg_pct - target
-                if abs(diff) <= 5:
-                    st.success(f"✅ **{bucket}**: You're averaging {avg_pct:.1f}% — right on track with the {target}% target!")
-                elif diff > 5:
+            if abs(diff) <= 5:
+                st.success(f"✅ **{bucket}**: You're averaging {avg_pct:.1f}% — right on track with the {target}% target!")
+            elif bucket == "Savings":
+                if diff > 5:
+                    st.success(f"✅ **{bucket}**: You're averaging {avg_pct:.1f}% — {diff:.1f}% over the {target}% target. Great work!")
+                else:
+                    st.warning(f"⚠️ **{bucket}**: You're averaging {avg_pct:.1f}% — {abs(diff):.1f}% under the {target}% target. Try to save more!")
+            else:
+                if diff > 5:
                     st.warning(f"⚠️ **{bucket}**: You're averaging {avg_pct:.1f}% — {diff:.1f}% over the {target}% target.")
                 else:
                     st.info(f"ℹ️ **{bucket}**: You're averaging {avg_pct:.1f}% — {abs(diff):.1f}% under the {target}% target.")

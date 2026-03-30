@@ -5,8 +5,10 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from utils import load_data, CATEGORY_BUCKETS
+from components import render_sidebar
+render_sidebar()
 
-st.set_page_config(layout="wide", page_title="Finance Tracker")
+st.set_page_config(layout="wide", page_title="Finance Tracker", page_icon="💰")
 
 df = load_data()
 
@@ -162,7 +164,10 @@ with col2:
             ("Wants", wants_actual, wants, "#2196F3"),
             ("Savings", savings_actual, savings, "#FFA726")
         ]:
-            bar_color = color if actual <= target else "#FF5252"
+            if label == "Savings":
+                bar_color = color if actual >= target else "#FF5252"
+            else:
+                bar_color = color if actual <= target else "#FF5252"
             st.markdown(f"""
                 <div style='margin-bottom:12px;'>
                     <div style='display:flex; justify-content:space-between; font-size:12px; color:#888; margin-bottom:4px;'>

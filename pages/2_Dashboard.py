@@ -110,7 +110,10 @@ else:
 
             for bucket, target in targets.items():
                 actual = actuals[bucket]
-                color = "#00C853" if actual <= target else "#FF5252"
+                if bucket == "Savings":
+                    color = "#00C853" if actual >= target else "#FF5252"
+                else:
+                    color = "#00C853" if actual <= target else "#FF5252"
                 fig_budget.add_trace(go.Bar(
                     name=f"{bucket} (target {target}%)",
                     x=[bucket],
@@ -139,4 +142,4 @@ else:
                 barmode="group"
             )
             st.plotly_chart(fig_budget, use_container_width=True)
-            st.caption("🟢 Green = within target  🔴 Red = over target  ⬜ Dashed line = target %")
+            st.caption("🟢 Green = Within target  🔴 Red = Not on target  ⬜ Dashed line = target %")

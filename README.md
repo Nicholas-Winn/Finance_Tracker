@@ -1,6 +1,6 @@
 # 💰 Finance Tracker
 
-A full-stack personal finance web application built entirely in Python. This project was designed and developed from scratch to track personal expenses, visualize spending habits, and help maintain a customizable budget rule.
+A full-stack personal finance web application built in Python. This project was designed and developed from scratch to track personal expenses, visualize spending habits, and help maintain a customizable budget rule.
 
 ---
 
@@ -8,9 +8,21 @@ A full-stack personal finance web application built entirely in Python. This pro
 
 Finance Tracker started as a personal challenge to build a practical, real-world application using Python and SQLite. Every feature was deliberately designed around a real use case: making it easy to log, review, and reflect on my personal spending habits.
 
-The app follows the 50/30/20 budgeting philosophy, splitting expenses into Needs, Wants, and Savings with fully customizable targets and real-time visual feedback on whether spending aligns with those goals.
+The app follows a customizable budgeting philosophy, splitting expenses into Needs, Wants, and Savings with fully customizable targets and real-time visual feedback on whether spending aligns with goals.
 
 ---
+
+## Why I built
+
+I wanted to build a simple finance tracking tool that contains features that work for my situation. This tool aligns with my finance habits and is customizable if I ever need to change them. This project also encourages me to sit down each week, reflect on what I spent, and check whether my spending aligns with my goals. I can keep track if I am spending money properly, and saving money efficiently.
+
+Beyond the practical use case, this project was an opportunity to build something real with Python. Designing the data model, building the dashboard, wiring up automated email reminders, and deploying a live application taught me a useful set of skills. The fact that I actually use it every week makes it even more rewarding.
+
+---
+
+## Preview
+
+![Finance Tracker Dashboard](assets/dashboard.png)
 
 ## What I Built
 
