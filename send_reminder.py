@@ -7,23 +7,27 @@ def send_reminder():
     gmail = os.environ["GMAIL"]
     app_password = os.environ["GMAIL_APP_PASSWORD"]
     recipient = os.environ["RECIPIENT_EMAIL"]
-    app_url = os.environ["APP_URL"]
 
     msg = MIMEMultipart()
     msg["From"] = gmail
     msg["To"] = recipient
     msg["Subject"] = "💰 Time to log your weekly expenses!"
 
-    body = f"""
-    Hi there!
+    body = """
+    Hi Nick!
 
     This is your weekly reminder to log your expenses.
 
-    Click the link below to open your Finance Tracker and log this week's spending:
+    To get started:
+    1. Open VS Code
+    2. Activate your virtual environment: venv\\Scripts\\activate
+    3. Switch to your private branch: git checkout private
+    4. Run the app: streamlit run app.py
+    5. Log this week's expenses
 
-    {app_url}
+    Stay on track this week!
 
-    Happy tracking!
+    — Finance Tracker
     """
 
     msg.attach(MIMEText(body, "plain"))
