@@ -15,11 +15,65 @@ CATEGORY_BUCKETS = {
 
 def load_data():
     conn = sqlite3.connect("finances.db")
+    c = conn.cursor()
+    c.execute('''
+        CREATE TABLE IF NOT EXISTS expenses (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            date TEXT,
+            description TEXT,
+            category TEXT,
+            amount REAL,
+            payment_method TEXT,
+            notes TEXT
+        )
+    ''')
+    conn.commit()
     df = pd.read_sql_query("SELECT * FROM expenses ORDER BY date DESC", conn)
     conn.close()
     if not df.empty:
         df["date"] = pd.to_datetime(df["date"], format='mixed').dt.date
     return df
+
+def seed_sample_data():
+    conn = sqlite3.connect("finances.db")
+    c = conn.cursor()
+    c.execute("SELECT COUNT(*) FROM expenses")
+    count = c.fetchone()[0]
+    
+    if count == 0:
+        import random
+        from datetime import date, timedelta
+        sample_expenses = [
+            ("Groceries", 85.50, "Debit Card", "Groceries"),
+            ("Rent", 1500.00, "Credit Card", "Bills & Utilities"),
+            ("Netflix", 15.99, "Credit Card", "Entertainment"),
+            ("Gym membership", 30.00, "Credit Card", "Health & Fitness"),
+            ("Dining Out", 45.00, "Credit Card", "Dining Out"),
+            ("Groceries", 92.30, "Debit Card", "Groceries"),
+            ("Uber", 18.50, "Credit Card", "Transportation"),
+            ("Shopping", 120.00, "Credit Card", "Shopping"),
+            ("Electric bill", 95.00, "Debit Card", "Bills & Utilities"),
+            ("Savings", 200.00, "Debit Card", "Savings"),
+            ("Dining Out", 38.00, "Cash", "Dining Out"),
+            ("Groceries", 76.40, "Debit Card", "Groceries"),
+            ("Entertainment", 55.00, "Credit Card", "Entertainment"),
+            ("Transportation", 45.00, "Debit Card", "Transportation"),
+            ("Shopping", 89.99, "Credit Card", "Shopping"),
+            ("Savings", 150.00, "Debit Card", "Savings"),
+            ("Dining Out", 62.00, "Credit Card", "Dining Out"),
+            ("Groceries", 110.20, "Debit Card", "Groceries"),
+            ("Health & Fitness", 25.00, "Cash", "Health & Fitness"),
+            ("Bills & Utilities", 80.00, "Debit Card", "Bills & Utilities"),
+        ]
+        today = date.today()
+        for description, amount, payment, category in sample_expenses:
+            expense_date = today - timedelta(days=random.randint(0, 60))
+            c.execute('''
+                INSERT INTO expenses (date, description, category, amount, payment_method, notes)
+                VALUES (?, ?, ?, ?, ?, ?)
+            ''', (str(expense_date), description, category, amount, payment, "Sample data"))
+        conn.commit()
+    conn.close()
 
 def get_week_label(date):
     start = date - pd.Timedelta(days=date.dayofweek)

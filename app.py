@@ -11,6 +11,8 @@ render_sidebar()
 st.set_page_config(layout="wide", page_title="Finance Tracker", page_icon="💰")
 
 df = load_data()
+from utils import load_data, CATEGORY_BUCKETS, seed_sample_data
+seed_sample_data()
 
 if not df.empty:
     df["date"] = pd.to_datetime(df["date"], format='mixed')
