@@ -166,7 +166,8 @@ else:
             st.success(f"✅ Your spending has been trending **down {abs(trend_pct):.1f}%** over time. Great work!")
 
     fig_trend = px.line(
-        weekly_totals, x="week", y="amount",
+        weekly_totals.sort_values("week_start"),
+        x="week", y="amount",
         markers=True,
         labels={"amount": "Amount ($)", "week": "Week"},
         color_discrete_sequence=["#00C853"]
@@ -175,7 +176,8 @@ else:
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
         font=dict(color="#FAFAFA"),
-        xaxis=dict(type="category"),
+        xaxis=dict(type="category", categoryorder="array",
+                   categoryarray=weekly_totals.sort_values("week_start")["week"].tolist()),
         height=250,
         margin=dict(t=20, b=0, l=0, r=0)
     )
@@ -195,9 +197,11 @@ else:
     targets = {"Needs": 50, "Wants": 30, "Savings": 20}
     colors = {"Needs": "#00C853", "Wants": "#2196F3", "Savings": "#FF9800"}
 
+    ordered_weeks = weekly_buckets.drop_duplicates("week").sort_values("week_start")["week"].tolist()
+
     fig_budget_trend = go.Figure()
     for bucket, target in targets.items():
-        bucket_data = weekly_buckets[weekly_buckets["bucket"] == bucket]
+        bucket_data = weekly_buckets[weekly_buckets["bucket"] == bucket].sort_values("week_start")
         fig_budget_trend.add_trace(go.Scatter(
             x=bucket_data["week"],
             y=bucket_data["pct"],
@@ -217,7 +221,7 @@ else:
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
         font=dict(color="#FAFAFA"),
-        xaxis=dict(type="category"),
+        xaxis=dict(type="category", categoryorder="array", categoryarray=ordered_weeks),
         yaxis=dict(title="%", range=[0, 110]),
         height=300,
         margin=dict(t=20, b=0, l=0, r=0),
@@ -231,18 +235,18 @@ else:
             if not bucket_data.empty:
                 avg_pct = bucket_data["pct"].mean()
                 diff = avg_pct - target
-            if abs(diff) <= 5:
-                st.success(f"✅ **{bucket}**: You're averaging {avg_pct:.1f}% — right on track with the {target}% target!")
-            elif bucket == "Savings":
-                if diff > 5:
-                    st.success(f"✅ **{bucket}**: You're averaging {avg_pct:.1f}% — {diff:.1f}% over the {target}% target. Great work!")
+                if abs(diff) <= 5:
+                    st.success(f"✅ **{bucket}**: You're averaging {avg_pct:.1f}% — right on track with the {target}% target!")
+                elif bucket == "Savings":
+                    if diff > 5:
+                        st.success(f"✅ **{bucket}**: You're averaging {avg_pct:.1f}% — {diff:.1f}% over the {target}% target. Great work!")
+                    else:
+                        st.warning(f"⚠️ **{bucket}**: You're averaging {avg_pct:.1f}% — {abs(diff):.1f}% under the {target}% target. Try to save more!")
                 else:
-                    st.warning(f"⚠️ **{bucket}**: You're averaging {avg_pct:.1f}% — {abs(diff):.1f}% under the {target}% target. Try to save more!")
-            else:
-                if diff > 5:
-                    st.warning(f"⚠️ **{bucket}**: You're averaging {avg_pct:.1f}% — {diff:.1f}% over the {target}% target.")
-                else:
-                    st.info(f"ℹ️ **{bucket}**: You're averaging {avg_pct:.1f}% — {abs(diff):.1f}% under the {target}% target.")
+                    if diff > 5:
+                        st.warning(f"⚠️ **{bucket}**: You're averaging {avg_pct:.1f}% — {diff:.1f}% over the {target}% target.")
+                    else:
+                        st.info(f"ℹ️ **{bucket}**: You're averaging {avg_pct:.1f}% — {abs(diff):.1f}% under the {target}% target.")
 
     st.divider()
 
@@ -272,7 +276,8 @@ else:
             st.warning(f"⚠️ You're saving {savings_pct:.1f}% this month — try to get closer to the 20% target.")
 
         fig_savings = px.bar(
-            weekly_savings, x="week", y="amount",
+            weekly_savings.sort_values("week_start"),
+            x="week", y="amount",
             labels={"amount": "Amount ($)", "week": "Week"},
             color_discrete_sequence=["#00C853"]
         )
@@ -280,7 +285,8 @@ else:
             paper_bgcolor="rgba(0,0,0,0)",
             plot_bgcolor="rgba(0,0,0,0)",
             font=dict(color="#FAFAFA"),
-            xaxis=dict(type="category"),
+            xaxis=dict(type="category", categoryorder="array",
+                       categoryarray=weekly_savings.sort_values("week_start")["week"].tolist()),
             height=250,
             margin=dict(t=20, b=0, l=0, r=0)
         )
