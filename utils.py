@@ -1,5 +1,6 @@
 import pandas as pd
 import sqlite3
+import streamlit as st
 
 CATEGORY_BUCKETS = {
     "Groceries": "Needs",
