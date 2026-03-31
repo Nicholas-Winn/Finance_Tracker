@@ -37,10 +37,13 @@ def load_data():
 def seed_sample_data():
     conn = sqlite3.connect("finances.db")
     c = conn.cursor()
+    c.execute("CREATE TABLE IF NOT EXISTS expenses (id INTEGER PRIMARY KEY AUTOINCREMENT, date TEXT, description TEXT, category TEXT, amount REAL, payment_method TEXT, notes TEXT)")
+    conn.commit()
     c.execute("SELECT COUNT(*) FROM expenses")
     count = c.fetchone()[0]
-    
+
     if True:
+        c.execute("DELETE FROM expenses")
         import random
         from datetime import date, timedelta
         sample_expenses = [
