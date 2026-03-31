@@ -1,12 +1,15 @@
 import streamlit as st
 import sqlite3
+import pandas as pd
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils import load_data, filter_data, get_periods
-from components import render_sidebar
+from components import render_sidebar, check_password
 
 st.set_page_config(layout="wide")
+if not check_password():
+    st.stop()
 render_sidebar()
 
 st.title("📋 My Expenses")
@@ -54,14 +57,21 @@ else:
     if st.button("💾 Save Changes"):
         conn = sqlite3.connect("finances.db")
         c = conn.cursor()
+        existing_ids = filtered_df["id"].tolist()
+        edited_ids = edited_df["id"].dropna().tolist() if "id" in edited_df.columns else []
+        deleted_ids = [i for i in existing_ids if i not in edited_ids]
+        for del_id in deleted_ids:
+            c.execute("DELETE FROM expenses WHERE id=?", (del_id,))
         for _, row in edited_df.iterrows():
-            c.execute('''
-                UPDATE expenses
-                SET date=?, description=?, category=?, amount=?, payment_method=?, notes=?
-                WHERE id=?
-            ''', (str(row["date"]), row["description"], row["category"],
-                  row["amount"], row["payment_method"], row["notes"], row["id"]))
+            if pd.notna(row.get("id")):
+                c.execute('''
+                    UPDATE expenses
+                    SET date=?, description=?, category=?, amount=?, payment_method=?, notes=?
+                    WHERE id=?
+                ''', (str(row["date"]), row["description"], row["category"],
+                      row["amount"], row["payment_method"], row["notes"], row["id"]))
         conn.commit()
         conn.close()
+        st.cache_data.clear()
         st.success("✅ Changes saved!")
         st.rerun()

@@ -4,15 +4,14 @@ import pandas as pd
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-from utils import load_data, CATEGORY_BUCKETS
+from utils import load_data, CATEGORY_BUCKETS, seed_sample_data
 from components import render_sidebar
-render_sidebar()
 
 st.set_page_config(layout="wide", page_title="Finance Tracker", page_icon="💰")
+render_sidebar()
+seed_sample_data()
 
 df = load_data()
-from utils import load_data, CATEGORY_BUCKETS, seed_sample_data
-seed_sample_data()
 
 if not df.empty:
     df["date"] = pd.to_datetime(df["date"], format='mixed')
@@ -58,6 +57,8 @@ st.markdown("""
         .section-title { font-size: 18px; font-weight: 500; color: #FAFAFA; margin-bottom: 4px; }
         .section-sub { font-size: 13px; color: #888; margin-bottom: 1.5rem; }
         .divider { border: none; border-top: 0.5px solid #2a2f3e; margin: 2rem 0; }
+        .finance-title { font-size: 48px; font-weight: 500; color: #00C853; text-align: center; padding: 2rem 0 0.5rem; }
+        .finance-sub { font-size: 16px; color: #888; text-align: center; margin-bottom: 2rem; }
     </style>
 """, unsafe_allow_html=True)
 

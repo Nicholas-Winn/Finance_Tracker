@@ -11,9 +11,11 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils import load_data, get_week_label, CATEGORY_BUCKETS
-from components import render_sidebar
+from components import render_sidebar, check_password
 
 st.set_page_config(layout="wide")
+if not check_password():
+    st.stop()
 render_sidebar()
 
 def load_config():
@@ -75,7 +77,7 @@ try:
                 except Exception as e:
                     st.error(f"❌ Failed to send email: {e}")
 except FileNotFoundError:
-    st.error("❌ config.json not found. Please create it in your project folder.")
+    st.info("ℹ️ Email reminders are configured via GitHub Actions. No setup needed here.")
 
 st.divider()
 
@@ -130,8 +132,8 @@ else:
     col1.metric("This Week", f"${this_week_total:.2f}")
     col2.metric("Last Week", f"${last_week_total:.2f}")
     col3.metric("Difference", f"${abs(week_diff):.2f}",
-                delta=f"{'more' if week_diff > 0 else 'less'} than last week",
-                delta_color="inverse")
+                delta=f"{'▲' if week_diff > 0 else '▼'} {'more' if week_diff > 0 else 'less'} than last week",
+                delta_color="inverse" if week_diff > 0 else "normal")
 
     st.divider()
 
@@ -144,8 +146,8 @@ else:
     col1.metric(f"{current_month}", f"${this_month_total:.2f}")
     col2.metric(f"{last_month}", f"${last_month_total:.2f}")
     col3.metric("Difference", f"${abs(month_diff):.2f}",
-                delta=f"{'more' if month_diff > 0 else 'less'} than last month",
-                delta_color="inverse")
+                delta=f"{'▲' if month_diff > 0 else '▼'} {'more' if month_diff > 0 else 'less'} than last month",
+                delta_color="inverse" if month_diff > 0 else "normal")
 
     st.divider()
 
