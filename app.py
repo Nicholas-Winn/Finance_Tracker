@@ -156,11 +156,14 @@ with col1:
         st.session_state.savings_pct_target = savings
 
 with col2:
-    if not df.empty and total > 0:
-        bucket_totals = this_month.groupby("bucket")["amount"].sum()
-        needs_actual = (bucket_totals.get("Needs", 0) / total * 100)
-        wants_actual = (bucket_totals.get("Wants", 0) / total * 100)
-        savings_actual = (bucket_totals.get("Savings", 0) / total * 100)
+    all_total = df["amount"].sum() if not df.empty else 0
+    if not df.empty and all_total > 0:
+        df_buckets = df.copy()
+        df_buckets["bucket"] = df_buckets["category"].map(CATEGORY_BUCKETS)
+        bucket_totals = df_buckets.groupby("bucket")["amount"].sum()
+        needs_actual = (bucket_totals.get("Needs", 0) / all_total * 100)
+        wants_actual = (bucket_totals.get("Wants", 0) / all_total * 100)
+        savings_actual = (bucket_totals.get("Savings", 0) / all_total * 100)
 
         for label, actual, target, color in [
             ("Needs", needs_actual, needs, "#00C853"),
