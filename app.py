@@ -70,6 +70,13 @@ st.markdown("""
     </div>
 """, unsafe_allow_html=True)
 
+st.markdown("""
+    <div style='background:#1A1F2E; border-left: 3px solid #00C853; border-radius: 8px; padding: 0.8rem 1.2rem; margin-bottom: 1.5rem;'>
+        <p style='color:#FAFAFA; font-size:13px; margin:0; font-weight:500;'>📊 Live Demo</p>
+        <p style='color:#888; font-size:12px; margin:4px 0 0;'>This is a portfolio demo running on sample data. The full app runs locally with real personal finance data, password protection, and automated weekly email reminders.</p>
+    </div>
+""", unsafe_allow_html=True)
+
 col1, col2, col3 = st.columns(3)
 with col1:
     week_arrow = "↓" if week_diff_pct < 0 else "↑"
