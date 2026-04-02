@@ -43,7 +43,7 @@ if "savings_pct_target" not in st.session_state:
 st.markdown("""
     <style>
         .hero { text-align: center; padding: 3rem 2rem 2rem; }
-        .logo-text { font-size: 13px; font-weight: 500; color: #00C853; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 1rem; }
+        .logo-text { font-size: 22px; font-weight: 500; color: #00C853; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 1rem; }
         .hero-title { font-size: 48px; font-weight: 500; color: #FAFAFA; line-height: 1.15; margin-bottom: 0.5rem; }
         .hero-title span { color: #00C853; }
         .hero-sub { font-size: 16px; color: #888; margin-bottom: 2rem; }
@@ -73,7 +73,8 @@ st.markdown("""
 st.markdown("""
     <div style='background:#1A1F2E; border-left: 3px solid #00C853; border-radius: 8px; padding: 0.8rem 1.2rem; margin-bottom: 1.5rem;'>
         <p style='color:#FAFAFA; font-size:13px; margin:0; font-weight:500;'>📊 Live Demo</p>
-        <p style='color:#888; font-size:12px; margin:4px 0 0;'>This is a portfolio demo running on sample data. The full app runs locally with real personal finance data, password protection, and automated weekly email reminders.</p>
+        <p style='color:#888; font-size:12px; margin:4px 0 0;'>This is a portfolio demo running on sample data. The full app runs locally with real personal finance data, password protection, and automated weekly email reminders.
+            Feel free to explore the features!</p>
     </div>
 """, unsafe_allow_html=True)
 
